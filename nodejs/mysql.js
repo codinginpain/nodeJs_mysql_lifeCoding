@@ -1,5 +1,5 @@
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
+var mysql      = require('mysql'); //require mysql module;
+var connection = mysql.createConnection({  
   host     : 'localhost',
   user     : 'nodejs',
   password : 'wjdrl123',
@@ -13,6 +13,7 @@ connection.query('SELECT * FROM topic', function (error, results, fields) {
       console.log(error);
   }
   console.log(results);
+  console.log(results[0].solution);
 });
  
 connection.end();
