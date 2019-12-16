@@ -104,6 +104,7 @@ var app = http.createServer(function(request,response){
       var body = '';
       request.on('data', function(data){
           body = body + data;
+          console.log("제사ㅠㅠ");
       });
       request.on('end', function(){
           var post = qs.parse(body);
