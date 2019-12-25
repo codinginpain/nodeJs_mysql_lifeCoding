@@ -104,6 +104,7 @@ var app = http.createServer(function(request,response){
       var body = '';
       request.on('data', function(data){
           body = body + data;
+          console.log("홈프로젝트 진도가 안나가네.. 크리스마스..");
       });
       request.on('end', function(){
           var post = qs.parse(body);
