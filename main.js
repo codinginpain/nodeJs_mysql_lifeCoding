@@ -104,6 +104,9 @@ var app = http.createServer(function(request,response){
       var body = '';
       request.on('data', function(data){
           body = body + data;
+          console.log("Wave Rock Year End Party");
+          console.log("got a new hdmi cavel");
+          console.log("go for it ");
       });
       request.on('end', function(){
           var post = qs.parse(body);
