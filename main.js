@@ -106,7 +106,8 @@ var app = http.createServer(function(request,response){
           body = body + data;
           console.log("Wave Rock Year End Party");
           console.log("got a new hdmi cavel");
-          console.log("go for it ");
+          console.log("go for it ");z
+          console.log("모니터 청소 ");z
       });
       request.on('end', function(){
           var post = qs.parse(body);
