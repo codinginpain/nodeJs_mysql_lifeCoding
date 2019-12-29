@@ -121,7 +121,7 @@ var app = http.createServer(function(request,response){
           // })
       });
     } else if(pathname === '/update'){
-      db.query('SELECT * FROM topics', function(error, topic) {
+      db.query('SELECT * FROM topic', function(error, topic) {
         // fs.readdir('./data', function(error, filelist){
           if(error) {
             throw error;
@@ -131,14 +131,14 @@ var app = http.createServer(function(request,response){
               throw error2;
             }
         // fs.readFile(`data/${filteredId}`, 'utf8', function(err, description){
-          var list = template.list(topics);
+          var list = template.list(topic);
           var html = template.HTML(topic[0].title, list,
             `
             <form action="/update_process" method="post">
               <input type="hidden" name="id" value="${topic[0].id}">
               <p><input type="text" name="title" placeholder="title" value="${topic[0].title}"></p>
               <p>
-                <textarea name="description" placeholder="description">${top[0].description}</textarea>
+                <textarea name="description" placeholder="description">${topic[0].description}</textarea>
               </p>
               <p>
                 <input type="submit">
