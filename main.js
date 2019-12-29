@@ -16,7 +16,7 @@ db.connect();
 
 var app = http.createServer(function(request,response){
     var _url = request.url;
-    var queryData = url.parse(_url, true).query;
+    var queryData = url.parse(_url, true).query;  //query string 값
     var pathname = url.parse(_url, true).pathname;
     if(pathname === '/'){
       if(queryData.id === undefined){
@@ -56,13 +56,12 @@ var app = http.createServer(function(request,response){
         // });
         db.query(`SELECT * FROM  topic`, function(error, topics) {
           if(error) {
-            throw error;
+            throw error;//error을 출력하고 서버를 stop함
           }
           db.query(`SELECT * FROM topic WHERE id = ?`, [queryData.id], function(error2, topic) { //where 절에 ?넣고 다음 인자로 배열에 담으면 그걸 where에 사용함 보안에 용이
             if(error2) {
               throw error2;
             }
-            console.log(topic[0].title);
             var title = topic[0].title;
             var description = topic[0].description;
             var list = template.list(topics);
@@ -104,21 +103,15 @@ var app = http.createServer(function(request,response){
       var body = '';
       request.on('data', function(data){
           body = body + data;
-          console.log("Wave Rock Year End Party");
-          console.log("got a new hdmi cavel");
-          console.log("go for it ");z
-          console.log("모니터 청소 ");z
       });
       request.on('end', function(){
           var post = qs.parse(body);
-          var title = post.title;
-          var description = post.description;
           db.query(`INSERT INTO topic (title, description, created, author_id) VALUES (?, ?, now(), ?)  `,
             [post.title, post.description, 1]  , function(error, result) {
               if(error) {
                 throw error;
               }
-            response.writeHead(302, {Location: `/?id=${title}`});
+            response.writeHead(302, {Location: `/?id=${result.insertId}`});
             response.end();
             }
           )
@@ -128,25 +121,31 @@ var app = http.createServer(function(request,response){
           // })
       });
     } else if(pathname === '/update'){
-      fs.readdir('./data', function(error, filelist){
-        var filteredId = path.parse(queryData.id).base;
-        fs.readFile(`data/${filteredId}`, 'utf8', function(err, description){
-          var title = queryData.id;
-          var list = template.list(filelist);
-          var html = template.HTML(title, list,
+      db.query('SELECT * FROM topics', function(error, topic) {
+        // fs.readdir('./data', function(error, filelist){
+          if(error) {
+            throw error;
+          }
+          db.query(`SELECT * FROM topic WHERE id=?`, [queryData.id], function(error2, topic) {
+            if(error2) {
+              throw error2;
+            }
+        // fs.readFile(`data/${filteredId}`, 'utf8', function(err, description){
+          var list = template.list(topics);
+          var html = template.HTML(topic[0].title, list,
             `
             <form action="/update_process" method="post">
-              <input type="hidden" name="id" value="${title}">
-              <p><input type="text" name="title" placeholder="title" value="${title}"></p>
+              <input type="hidden" name="id" value="${topic[0].id}">
+              <p><input type="text" name="title" placeholder="title" value="${topic[0].title}"></p>
               <p>
-                <textarea name="description" placeholder="description">${description}</textarea>
+                <textarea name="description" placeholder="description">${top[0].description}</textarea>
               </p>
               <p>
                 <input type="submit">
               </p>
             </form>
             `,
-            `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`
+            `<a href="/create">create</a> <a href="/update?id=${topic[0].id}">update</a>`
           );
           response.writeHead(200);
           response.end(html);
