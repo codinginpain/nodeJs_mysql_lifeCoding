@@ -147,6 +147,7 @@ var app = http.createServer(function(request,response){
             `,
             `<a href="/create">create</a> <a href="/update?id=${topic[0].id}">update</a>`
           );
+          console.log("퀄컴");
           response.writeHead(200);
           response.end(html);
         });
